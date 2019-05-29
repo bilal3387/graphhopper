@@ -22,10 +22,10 @@ import com.graphhopper.storage.IntsRef;
 import java.util.Locale;
 
 /**
- * Implementation of the IntEncodedValue via a limited number of bits. It introduces simple handling of "backward"- and
- * "forward"-edge information.
+ * Implementation of the IntEncodedValue via a limited number of bits and without a sign. It introduces handling
+ * of "backward"- and "forward"-edge information.
  */
-public class SimpleIntEncodedValue implements IntEncodedValue {
+public class UnsignedIntEncodedValue implements IntEncodedValue {
 
     private final String name;
 
@@ -43,12 +43,12 @@ public class SimpleIntEncodedValue implements IntEncodedValue {
     int bwdMask;
     boolean storeBothDirections;
 
-    SimpleIntEncodedValue() {
+    UnsignedIntEncodedValue() {
         bits = 0;
         name = "";
     }
 
-    public SimpleIntEncodedValue(String name, int bits) {
+    public UnsignedIntEncodedValue(String name, int bits) {
         this(name, bits, false);
     }
 
@@ -59,13 +59,13 @@ public class SimpleIntEncodedValue implements IntEncodedValue {
      * @param storeBothDirections if true the encoded value can be different for the forward and backward
      *                            direction of an edge.
      */
-    public SimpleIntEncodedValue(String name, int bits, boolean storeBothDirections) {
+    public UnsignedIntEncodedValue(String name, int bits, boolean storeBothDirections) {
         if (!name.toLowerCase(Locale.ROOT).equals(name))
             throw new IllegalArgumentException("EncodedValue name must be lower case but was " + name);
         if (bits <= 0)
             throw new IllegalArgumentException(name + ": bits cannot be zero or negative");
-        if (bits > 32)
-            throw new IllegalArgumentException(name + ": at the moment bits cannot be >32");
+        if (bits > 31)
+            throw new IllegalArgumentException(name + ": at the moment the number of reserved bits cannot be more than 31");
         this.bits = bits;
         this.name = name;
         this.storeBothDirections = storeBothDirections;
@@ -153,7 +153,7 @@ public class SimpleIntEncodedValue implements IntEncodedValue {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SimpleIntEncodedValue that = (SimpleIntEncodedValue) o;
+        UnsignedIntEncodedValue that = (UnsignedIntEncodedValue) o;
 
         if (fwdDataIndex != that.fwdDataIndex) return false;
         if (bwdDataIndex != that.bwdDataIndex) return false;

@@ -23,7 +23,7 @@ import com.graphhopper.storage.IntsRef;
  * This class implements an ObjectEncodedValue via a list of enums. I.e. it stores just the indices
  * of the used objects as an integer value.
  */
-public final class EnumEncodedValue<E extends Enum> extends SimpleIntEncodedValue {
+public final class EnumEncodedValue<E extends Enum> extends UnsignedIntEncodedValue {
     private final E[] arr;
 
     public EnumEncodedValue(String name, Class<E> enumType) {
