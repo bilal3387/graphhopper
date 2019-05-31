@@ -39,6 +39,8 @@ public class Unzipper {
 
         if (remove)
             Helper.removeDir(from);
+	else{
+	}
         return true;
     }
 
@@ -48,7 +50,6 @@ public class Unzipper {
     public void unzip(InputStream fromIs, File toFolder, ProgressListener progressListener) throws IOException {
         if (!toFolder.exists())
             toFolder.mkdirs();
-
         long sumBytes = 0;
         String targetDirPath = toFolder.getCanonicalPath() + File.separator;
         ZipInputStream zis = new ZipInputStream(fromIs);
@@ -64,11 +65,9 @@ public class Unzipper {
                     if (!newFile.getCanonicalPath().startsWith(targetDirPath))
                         throw new IOException("Illegal zip entry. Zip entries must not escape destination: " + targetDirPath
                                 + " vs " + newFile.getCanonicalPath());
-    
                     double factor = 1;
                     if (ze.getCompressedSize() > 0 && ze.getSize() > 0)
                         factor = (double) ze.getCompressedSize() / ze.getSize();
-
                     FileOutputStream fos = new FileOutputStream(newFile);
                     try {
                         int len;
